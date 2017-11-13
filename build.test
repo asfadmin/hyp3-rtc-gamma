@@ -18,5 +18,5 @@ aws s3 sync --exclude "*" --include "sentinel_xml.xsl" s3://hyp3-docker/configs/
 aws s3 sync --exclude "*" --include "get_asf.cfg" s3://hyp3-docker/configs/ ./etc/
 
 echo "Building image..."
-docker build -t asf-hyp3-rtc-gamma:latest -f dockerfile.test .
+docker build -t asf-hyp3-rtc-gamma:latest -f dockerfile.test --build-arg FROM_IMAGE=asf-gamma .
 docker tag asf-hyp3-rtc-gamma:latest asf-hyp3-rtc-gamma:test

@@ -1,4 +1,5 @@
-FROM asf-gamma:test
+ARG FROM_IMAGE
+FROM $FROM_IMAGE:test
 
 # The following is expected in the context:
 # ./etc/id_rsa_docker
