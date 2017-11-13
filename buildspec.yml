@@ -1,0 +1,34 @@
+version: 0.1
+
+environment_variables:
+  plaintext:
+    PIPELINE_NAME: "asf-hyp3-rtc-gamma"
+    IMAGE_HOST: "626226570674.dkr.ecr.us-east-1.amazonaws.com"
+    IMAGE_NAME: "asf-hyp3-gamma"
+    CONFIGS_BUCKET: "hyp3-docker/configs"
+    SOFTWARE_BUCKET: "hyp3-docker/software"
+    MATURITY: "test"
+
+phases:
+  pre_build:
+    commands:
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
+      - aws codepipeline get-pipeline-state --name $PIPELINE_NAME --query 'stageStates[*].actionStates[?actionName==`Source`].currentRevision.revisionId' --output text | cut -c1-7 > sha1.txt
+
+      - aws s3 cp s3://$CONFIGS_BUCKET/id_rsa_docker ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/dot.netrc ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/proc.test.cfg ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/get_dem.pl.cfg ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/sentinel_xml.xsl ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/get_asf.cfg ./etc/
+  build:
+    commands:
+      - docker build -t $IMAGE_NAME:$MATURITY -f dockerfile.$MATURITY .
+  post_build:
+    commands:
+      - docker tag $IMAGE_NAME:$MATURITY $IMAGE_HOST/$IMAGE_NAME:latest
+      - docker push $IMAGE_HOST/$IMAGE_NAME:latest
+      - docker tag $IMAGE_NAME:$MATURITY $IMAGE_HOST/$IMAGE_NAME:$MATURITY
+      - docker push $IMAGE_HOST/$IMAGE_NAME:$MATURITY
+      - docker tag $IMAGE_NAME:$MATURITY $IMAGE_HOST/$IMAGE_NAME:$(cat sha1.txt)
+      - docker push $IMAGE_HOST/$IMAGE_NAME:$(cat sha1.txt)

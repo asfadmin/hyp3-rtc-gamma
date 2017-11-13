@@ -1,0 +1,22 @@
+#! /bin/bash
+
+# The following is expected in the context:
+# ./etc/id_rsa_docker
+# ./etc/dot.bash_path
+# ./etc/dot.netrc
+# ./etc/proc.test.cfg
+# ./etc/get_dem.pl.cfg
+# ./etc/sentinel_xml.xsl
+# ./etc/get_asf.cfg
+
+echo "Retrieving items from s3..."
+aws s3 sync --exclude "*" --include "id_rsa_docker" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "dot.netrc" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "proc.test.cfg" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "get_dem.pl.cfg" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "sentinel_xml.xsl" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "get_asf.cfg" s3://hyp3-docker/configs/ ./etc/
+
+echo "Building image..."
+docker build -t asf-hyp3-rtc-gamma:latest -f dockerfile.test .
+docker tag asf-hyp3-rtc-gamma:latest asf-hyp3-rtc-gamma:test

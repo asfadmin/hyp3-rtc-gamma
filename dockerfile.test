@@ -1,0 +1,44 @@
+FROM asf-gamma:test
+
+# The following is expected in the context:
+# ./etc/id_rsa_docker
+# ./etc/dot.netrc
+# ./etc/proc.test.cfg
+# ./etc/get_dem.pl.cfg
+# ./etc/sentinel_xml.xsl
+# ./etc/get_asf.cfg
+
+COPY ./etc/dot.netrc /root/.netrc
+
+RUN mkdir -p /data/hyp3_workdir/attachments
+
+RUN mkdir -p /root/.ssh
+COPY ./etc/id_rsa_docker /root/.ssh/id_rsa
+RUN chmod 700 /root/.ssh/id_rsa
+RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+
+WORKDIR /usr/local
+
+COPY ./src ./hyp3-rtc-gamma/src/
+
+RUN git clone -b devel --single-branch git@github.com:asfadmin/python_data_utils.git
+RUN git clone -b devel --single-branch git@github.com:asfadmin/python-asf.git
+RUN git clone -b test --single-branch git@github.com:asfadmin/hyp3-lib.git
+
+RUN git clone -b proc-test --single-branch git@github.com:asfadmin/cloud-proj.git
+RUN mkdir ./cloud-proj/processing/config/ ./cloud-proj/processing/log ./cloud-proj/processing/lock
+COPY ./etc/proc.test.cfg ./cloud-proj/processing/config/proc.cfg
+
+RUN git clone -b devel --single-branch git@github.com:asfadmin/gap_rtc.git
+COPY ./etc/get_dem.pl.cfg ./gap_rtc/config/get_dem.pl.cfg
+COPY ./etc/sentinel_xml.xsl ./gap_rtc/etc/sentinel_xml.xsl
+
+RUN git clone -b test --single-branch git@github.com:asfadmin/asf_api_assistant.git
+RUN mkdir ./asf_api_assistant/config/
+COPY ./etc/get_asf.cfg ./asf_api_assistant/config/get_asf.cfg
+
+WORKDIR /
+
+ENV PATH=/usr/local/gap_rtc/src:/usr/local/asf_api_assistant/src:/usr/local/python_data_utils/src:/usr/local/hyp3-rtc-gamma/src:${PATH}
+
+ENV PYTHONPATH=${PYTHONPATH}:/usr/local/python-asf:/usr/local/python_data_utils/src:/usr/local/gap_rtc/src:/usr/local/hyp3-rtc-gamma/src:/usr/local/hyp3-lib/src
