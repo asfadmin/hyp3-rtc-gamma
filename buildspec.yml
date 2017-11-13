@@ -23,6 +23,7 @@ phases:
       - aws s3 cp s3://$CONFIGS_BUCKET/get_asf.cfg ./etc/
   build:
     commands:
+      - echo "Building from image $IMAGE_HOST/asf-gamma"
       - docker build -t $IMAGE_NAME:$MATURITY -f dockerfile.$MATURITY --build-arg FROM_IMAGE=$IMAGE_HOST/asf-gamma .
   post_build:
     commands:
