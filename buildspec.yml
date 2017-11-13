@@ -21,9 +21,6 @@ phases:
       - aws s3 cp s3://$CONFIGS_BUCKET/get_dem.pl.cfg ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/sentinel_xml.xsl ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/get_asf.cfg ./etc/
-
-      - docker pull $IMAGE_HOST/asf-gamma:$MATURITY
-      - docker tag $IMAGE_HOST/asf-gamma:$MATURITY asf-gamma:$MATURITY
   build:
     commands:
       - docker build -t $IMAGE_NAME:$MATURITY -f dockerfile.$MATURITY --build-arg FROM_IMAGE=$IMAGE_HOST/asf-gamma .
