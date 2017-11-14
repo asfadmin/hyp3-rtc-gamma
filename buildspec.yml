@@ -15,18 +15,19 @@ phases:
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
       - aws codepipeline get-pipeline-state --name $PIPELINE_NAME --query 'stageStates[*].actionStates[?actionName==`Source`].currentRevision.revisionId' --output text | cut -c1-7 > sha1.txt
 
-      - apt-get update -y
-
       - aws s3 cp s3://$CONFIGS_BUCKET/id_rsa_docker ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/dot.netrc ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/proc.test.cfg ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/get_dem.pl.cfg ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/sentinel_xml.xsl ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/get_asf.cfg ./etc/
+
+      # Replace dockerfile from with AWS path to get around registry issues
+      - sed -i 's/FROM asf-gamma/FROM $IMAGE_HOST/asf-gamma/' file.txt
   build:
     commands:
       - echo "Building from image $IMAGE_HOST/asf-gamma"
-      - docker build -t $IMAGE_NAME:$MATURITY -f dockerfile.$MATURITY --build-arg FROM_IMAGE=$IMAGE_HOST/asf-gamma .
+      - docker build -t $IMAGE_NAME:$MATURITY -f dockerfile.$MATURITY .
   post_build:
     commands:
       - docker tag $IMAGE_NAME:$MATURITY $IMAGE_HOST/$IMAGE_NAME:latest
