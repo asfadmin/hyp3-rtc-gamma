@@ -4,5 +4,5 @@
 
 $(aws ecr get-login --no-include-email --region us-east-1)
 
-docker run -it --rm asf-hyp3-rtc-gamma python /usr/local/cloud-proj/processing/proc/proc_rtc.py --spot --verbose -n 1
+docker run -it --rm 626226570674.dkr.ecr.us-east-1.amazonaws.com/asf-hyp3-rtc-gamma python /usr/local/cloud-proj/processing/proc/proc_rtc.py --spot --verbose -n 1
 
