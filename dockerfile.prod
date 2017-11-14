@@ -4,7 +4,7 @@ FROM asf-gamma:prod
 # ./etc/id_rsa_docker
 # ./etc/dot.netrc
 # ./etc/proc.prod.cfg
-# ./etc/get_dem.pl.cfg
+# ./etc/get_dem.py.cfg
 # ./etc/sentinel_xml.xsl
 # ./etc/get_asf.cfg
 
@@ -30,7 +30,7 @@ RUN mkdir ./cloud-proj/processing/config/ ./cloud-proj/processing/log ./cloud-pr
 COPY ./etc/proc.prod.cfg ./cloud-proj/processing/config/proc.cfg
 
 RUN git clone -b devel --single-branch git@github.com:asfadmin/gap_rtc.git
-COPY ./etc/get_dem.pl.cfg ./gap_rtc/config/get_dem.pl.cfg
+COPY ./etc/get_dem.py.cfg ./gap_rtc/config/get_dem.py.cfg
 COPY ./etc/sentinel_xml.xsl ./gap_rtc/etc/sentinel_xml.xsl
 
 RUN git clone -b prod --single-branch git@github.com:asfadmin/asf_api_assistant.git

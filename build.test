@@ -13,7 +13,7 @@ echo "Retrieving items from s3..."
 aws s3 sync --exclude "*" --include "id_rsa_docker" s3://hyp3-docker/configs/ ./etc/
 aws s3 sync --exclude "*" --include "dot.netrc" s3://hyp3-docker/configs/ ./etc/
 aws s3 sync --exclude "*" --include "proc.test.cfg" s3://hyp3-docker/configs/ ./etc/
-aws s3 sync --exclude "*" --include "get_dem.pl.cfg" s3://hyp3-docker/configs/ ./etc/
+aws s3 sync --exclude "*" --include "get_dem.py.cfg" s3://hyp3-docker/configs/ ./etc/
 aws s3 sync --exclude "*" --include "sentinel_xml.xsl" s3://hyp3-docker/configs/ ./etc/
 aws s3 sync --exclude "*" --include "get_asf.cfg" s3://hyp3-docker/configs/ ./etc/
 
