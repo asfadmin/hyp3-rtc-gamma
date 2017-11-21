@@ -2,7 +2,19 @@
 
 # Use this script to run the gamma_rtc hyp3 code locally. You still need to set a product to queue and start this script before the Test cron fires and picks it up. Of course, you could use something simmilar to this for on-prem work. Just change from --spot to --on-prem (I think).
 
+IMAGE="626226570674.dkr.ecr.us-east-1.amazonaws.com/asf-hyp3-rtc-gamma:test"
+
+while getopts "l" opt; do
+    case $opt in 
+        l) 
+            IMAGE="asf-hyp3-rtc-gamma:test"
+            ;;
+    esac
+done
+
+echo "Kenny Loggins in..."
 $(aws ecr get-login --no-include-email --region us-east-1)
 
-docker run -it --rm 626226570674.dkr.ecr.us-east-1.amazonaws.com/asf-hyp3-rtc-gamma python /usr/local/cloud-proj/processing/proc/proc_rtc.py --spot --verbose -n 1
+echo "Running $IMAGE"
+docker run -it --rm $IMAGE python /usr/local/cloud-proj/processing/proc/proc_rtc.py --spot --verbose -n 1
 

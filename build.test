@@ -1,5 +1,8 @@
 #! /bin/bash
 
+NOCACHE=""
+while getopts "n" opt; do case $opt in n) NOCACHE="--no-cache";; esac done
+
 # The following is expected in the context:
 # ./etc/id_rsa_docker
 # ./etc/dot.bash_path
@@ -18,5 +21,5 @@ aws s3 sync --exclude "*" --include "sentinel_xml.xsl" s3://hyp3-docker/configs/
 aws s3 sync --exclude "*" --include "get_asf.cfg" s3://hyp3-docker/configs/ ./etc/
 
 echo "Building image..."
-docker build -t asf-hyp3-rtc-gamma:latest -f dockerfile.test .
+docker build -t asf-hyp3-rtc-gamma:latest -f dockerfile.test $NOCACHE .
 docker tag asf-hyp3-rtc-gamma:latest asf-hyp3-rtc-gamma:test
