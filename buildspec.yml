@@ -2,9 +2,9 @@ version: 0.1
 
 environment_variables:
   plaintext:
-    PIPELINE_NAME: "asf-hyp3-rtc-gamma"
+    PIPELINE_NAME: "hyp3-rtc-gamma"
     IMAGE_HOST: "626226570674.dkr.ecr.us-east-1.amazonaws.com"
-    IMAGE_NAME: "asf-hyp3-rtc-gamma"
+    IMAGE_NAME: "hyp3-rtc-gamma"
     CONFIGS_BUCKET: "hyp3-docker/configs"
     SOFTWARE_BUCKET: "hyp3-docker/software"
     MATURITY: "test"
