@@ -18,7 +18,7 @@ phases:
       - aws s3 cp s3://$CONFIGS_BUCKET/id_rsa_docker ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/dot.netrc ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/proc.test.cfg ./etc/
-      - aws s3 cp s3://$CONFIGS_BUCKET/get_dem.pl.cfg ./etc/
+      - aws s3 cp s3://$CONFIGS_BUCKET/get_dem.py.cfg ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/sentinel_xml.xsl ./etc/
       - aws s3 cp s3://$CONFIGS_BUCKET/get_asf.cfg ./etc/
   build:
